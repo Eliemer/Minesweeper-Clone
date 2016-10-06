@@ -12,11 +12,14 @@ public class MyPanel extends JPanel{
 	private static final int INNER_CELL_SIZE = 29;
 	private static final int TOTAL_COLUMNS = 9;
 	private static final int TOTAL_ROWS = 9;
+	public Random randomMine = new Random();
+	public int numMines = 0;
 	public int x = -1;
 	public int y = -1;
 	public int mouseDownGridX = 0;
 	public int mouseDownGridY = 0;
 	public Color[][] colorArray = new Color[TOTAL_COLUMNS][TOTAL_ROWS];
+	public int mineArray[][] = new int[TOTAL_COLUMNS][TOTAL_ROWS];
 	public MyPanel(){
 		if (INNER_CELL_SIZE + (new Random()).nextInt(1) < 1){
 			throw new RuntimeException("INNER_CELL_SIZE must be positive!");
@@ -61,10 +64,21 @@ public class MyPanel extends JPanel{
 		//Paint cell colors
 		for (int x = 0; x < TOTAL_COLUMNS; x ++){
 			for (int y = 0; y < TOTAL_ROWS; y ++){
-				if ((x == 0) || (y != TOTAL_ROWS)) {
 					Color c = colorArray[x][y];
 					g.setColor(c);
 					g.fillRect(x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)) + 1, y1 + GRID_Y + (y * (INNER_CELL_SIZE + 1)) + 1, INNER_CELL_SIZE, INNER_CELL_SIZE);
+			}
+		}
+		
+		//Randomly populate cells with mines
+		while (numMines < 9){
+			for (int x = 0; x< TOTAL_COLUMNS; x ++){
+				for (int y = 0; y < TOTAL_ROWS; y ++){
+					int newMine = randomMine.nextInt(2);
+					if (newMine == 1){
+						numMines ++;
+					}
+					mineArray[x][y] = newMine;
 				}
 			}
 		}
@@ -86,7 +100,7 @@ public class MyPanel extends JPanel{
 		}
 		x = x / (INNER_CELL_SIZE + 1);
 		y = y / (INNER_CELL_SIZE + 1);
-		if (x < 0 || x > TOTAL_COLUMNS - 1 || y < 0 || y > TOTAL_ROWS - 2) {   //Outside the rest of the grid
+		if (x < 0 || x > TOTAL_COLUMNS - 1 || y < 0 || y > TOTAL_ROWS - 1) {   //Outside the rest of the grid
 			return -1;
 		}
 		return x;
@@ -108,7 +122,7 @@ public class MyPanel extends JPanel{
 		}
 		x = x / (INNER_CELL_SIZE + 1);
 		y = y / (INNER_CELL_SIZE + 1);
-		if (x < 0 || x > TOTAL_COLUMNS - 1 || y < 0 || y > TOTAL_ROWS - 2) {   //Outside the rest of the grid
+		if (x < 0 || x > TOTAL_COLUMNS - 1 || y < 0 || y > TOTAL_ROWS - 1) {   //Outside the rest of the grid
 			return -1;
 		}
 		return y;
