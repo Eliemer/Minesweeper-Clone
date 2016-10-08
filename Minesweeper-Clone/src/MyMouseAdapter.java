@@ -3,25 +3,16 @@ import java.awt.Component;
 import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Random;
+//import java.util.Random;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+//import javax.swing.JOptionPane;
 
 public class MyMouseAdapter extends MouseAdapter{
-	private Random generator = new Random();
+	//private Random generator = new Random();
 	
-	public boolean checkForMines(MyPanel myPanel){
-		if (myPanel.mineArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] == 1){
-			return true;
-		} else {
-		return false;
-		}
-	}
-	public void triggerMine(){
-		JOptionPane.showMessageDialog(null, "GAME OVER!");
-		return; //dummy return
-	}
+
+	
 	
 	public void mousePressed(MouseEvent e){
 		switch (e.getButton()){
@@ -30,6 +21,7 @@ public class MyMouseAdapter extends MouseAdapter{
 			while (!(c instanceof JFrame)){
 				c = c.getParent();
 				if (c == null){
+					
 					return;
 				}
 			}
@@ -94,18 +86,21 @@ public class MyMouseAdapter extends MouseAdapter{
 						//Released the mouse button on the same cell where it was pressed
 						//Here is where the game mechanics go
 						Color newColor = null;
-						if (!checkForMines(myPanel)){ // checks if mine is clicked
+						
+						if (!myPanel.checkForMines(myPanel.mouseDownGridX,myPanel.mouseDownGridY)){ // checks if mine is clicked																					
+							myPanel.checkAdjacent(myPanel.mouseDownGridX, myPanel.mouseDownGridY);							
 							newColor = Color.GRAY;
 						}
+						
+						
 						//A mine is clicked
 						//cell is colored Red
 						//Game over message is shown, and app is terminated
 						else {
-							newColor = Color.RED;
+							newColor = Color.BLACK;
 							myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] = newColor;
+							myPanel.triggerMine();
 							myPanel.repaint();
-							triggerMine();
-							
 							myFrame.dispose();
 						}
 						myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] = newColor;
