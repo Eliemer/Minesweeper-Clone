@@ -3,25 +3,18 @@ import java.awt.Component;
 import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Random;
+//import java.util.Random;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+//import javax.swing.JOptionPane;
 
 public class MyMouseAdapter extends MouseAdapter{
-	private Random generator = new Random();
+	//private Random generator = new Random();
 	
 	public boolean checkForMines(MyPanel myPanel){
-		if (myPanel.mineArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] == 1){
-			return true;
-		} else {
-		return false;
-		}
+		return myPanel.mineArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] == 1;		
 	}
-	public void triggerMine(){
-		JOptionPane.showMessageDialog(null, "GAME OVER!");
-		return; //dummy return
-	}
+	
 	
 	public void mousePressed(MouseEvent e){
 		switch (e.getButton()){
@@ -101,11 +94,10 @@ public class MyMouseAdapter extends MouseAdapter{
 						//cell is colored Red
 						//Game over message is shown, and app is terminated
 						else {
-							newColor = Color.RED;
+							newColor = Color.BLACK;
 							myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] = newColor;
+							myPanel.triggerMine();
 							myPanel.repaint();
-							triggerMine();
-							
 							myFrame.dispose();
 						}
 						myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] = newColor;

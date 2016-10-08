@@ -3,6 +3,7 @@ import java.awt.Graphics;
 import java.awt.Insets;
 import java.util.Random;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class MyPanel extends JPanel{
@@ -71,15 +72,14 @@ public class MyPanel extends JPanel{
 		}
 		
 		//Randomly populate cells with mines
-		while (numMines < 9){
-			for (int x = 0; x< TOTAL_COLUMNS; x ++){
-				for (int y = 0; y < TOTAL_ROWS; y ++){
-					int newMine = randomMine.nextInt(2);
-					if (newMine == 1){
-						numMines ++;
-					}
-					mineArray[x][y] = newMine;
+		
+		for (int x = 0; x< TOTAL_COLUMNS; x ++){
+			for (int y = 0; y < TOTAL_ROWS; y ++){
+				int newMine = randomMine.nextInt(2);
+				if (newMine == 1 && numMines < 9){
+					numMines ++;
 				}
+				mineArray[x][y] = newMine;
 			}
 		}
 	}
@@ -127,4 +127,18 @@ public class MyPanel extends JPanel{
 		}
 		return y;
 	}
+	public void triggerMine(){
+		
+		for (int i = 0; i < mineArray.length; i++){
+			for (int j = 0; j < mineArray[i].length; j++){
+				if (mineArray[i][j] == 1){
+					colorArray[i][j] = Color.RED;
+				}
+			}
+		}
+		this.repaint();
+		JOptionPane.showMessageDialog(null, "GAME OVER!");
+		return; //dummy return
+	}
+	
 }
