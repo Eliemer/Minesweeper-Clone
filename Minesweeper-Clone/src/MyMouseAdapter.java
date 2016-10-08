@@ -3,44 +3,16 @@ import java.awt.Component;
 import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Random;
+//import java.util.Random;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
-import java.awt.Font;
-import java.awt.Graphics;
-
-
+//import javax.swing.JOptionPane;
 
 public class MyMouseAdapter extends MouseAdapter{
-	
-	
-	
-	private Random generator = new Random();
-	private int mineCounter = 0;
+	//private Random generator = new Random();
 	
 
-// Painting Method for Number of Mines in Adjacent Cells: Unfinished	
-//	  public void paint(Graphics g) {
-//		 
-//		    g.drawString(mineCounter + "", 150, 150);
-//		  }
-
 	
-	public boolean checkForMines(MyPanel myPanel){
-		if (myPanel.mineArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] == 1){
-			return true;
-		} else {
-		return false;
-		}
-	}	
-	
-	
-	public void triggerMine(){
-		JOptionPane.showMessageDialog(null, "GAME OVER!");
-		return; //dummy return
-	}
 	
 	public void mousePressed(MouseEvent e){
 		switch (e.getButton()){
@@ -49,6 +21,7 @@ public class MyMouseAdapter extends MouseAdapter{
 			while (!(c instanceof JFrame)){
 				c = c.getParent();
 				if (c == null){
+					
 					return;
 				}
 			}
@@ -114,43 +87,27 @@ public class MyMouseAdapter extends MouseAdapter{
 						//Here is where the game mechanics go
 						Color newColor = null;
 						
-						if (!checkForMines(myPanel)){ // checks if mine is clicked														
-							for(int counterY= 0; counterY < 3; counterY++){  // checks for mines in 3x3 grid around clicked cell
-								myPanel.mouseDownGridY = myPanel.mouseDownGridY + counterY - 1;
-								for(int counterX = 0; counterX < 3; counterX++){								
-									myPanel.mouseDownGridX = myPanel.mouseDownGridX + counterX - 1;
-									if (myPanel.mouseDownGridX >= 0 && myPanel.mouseDownGridX <= 10 && myPanel.mouseDownGridY >= 0 && myPanel.mouseDownGridY <= 10 && !checkForMines(myPanel)){
-										newColor = Color.GRAY;																																														
-										myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] = newColor;
-										myPanel.repaint();
-									}
-									else{  // Takes into account the number of mines in adjacent cells
-									mineCounter++;
-									}
-								}							
-							}
+						if (!myPanel.checkForMines(myPanel.mouseDownGridX,myPanel.mouseDownGridY)){ // checks if mine is clicked																					
+							myPanel.checkAdjacent(myPanel.mouseDownGridX, myPanel.mouseDownGridY);							
+							newColor = Color.GRAY;
 						}
 						
 						
 						//A mine is clicked
-						//cell is colored Black
+						//cell is colored Red
 						//Game over message is shown, and app is terminated
 						else {
 							newColor = Color.BLACK;
 							myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] = newColor;
+							myPanel.triggerMine();
 							myPanel.repaint();
-//							triggerMine();
-//							
-//							myFrame.dispose();
+							myFrame.dispose();
 						}
-						mineCounter = 0;
+						myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] = newColor;
+						myPanel.repaint();
 					}
 				}
 			}
-			
-			
-			
-			
 			myPanel.repaint();
 			break;
 		case 3:		//Right mouse button

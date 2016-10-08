@@ -3,6 +3,7 @@ import java.awt.Graphics;
 import java.awt.Insets;
 import java.util.Random;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class MyPanel extends JPanel{
@@ -34,6 +35,14 @@ public class MyPanel extends JPanel{
 			for (int y = 0; y < TOTAL_ROWS; y ++){
 				colorArray[x][y] = Color.WHITE;
 			}
+		}
+		while (numMines < 9){
+			int newMine = randomMine.nextInt(2);
+			int X = randomMine.nextInt(TOTAL_COLUMNS);
+			int Y = randomMine.nextInt(TOTAL_ROWS);
+			if (newMine == 1 && mineArray[X][Y] != 1){
+				numMines ++;
+				mineArray[X][Y] = newMine;				}				
 		}
 	}
 	public void paintComponent(Graphics g){
@@ -71,17 +80,8 @@ public class MyPanel extends JPanel{
 		}
 		
 		//Randomly populate cells with mines
-		while (numMines < 9){
-			for (int x = 0; x< TOTAL_COLUMNS; x ++){
-				for (int y = 0; y < TOTAL_ROWS; y ++){
-					int newMine = randomMine.nextInt(2);
-					if (newMine == 1){
-						numMines ++;
-					}
-					mineArray[x][y] = newMine;
-				}
-			}
-		}
+		
+		
 	}
 	public int getGridX(int x, int y){
 		Insets myInsets = getInsets();
@@ -127,4 +127,42 @@ public class MyPanel extends JPanel{
 		}
 		return y;
 	}
-}
+	public void triggerMine(){
+		
+		for (int i = 0; i < mineArray.length; i++){
+			for (int j = 0; j < mineArray[i].length; j++){
+				if (mineArray[i][j] == 1){
+					colorArray[i][j] = Color.BLACK;
+				}
+			}
+		}
+		this.repaint();
+		JOptionPane.showMessageDialog(null, "GAME OVER!");
+		return; //dummy return
+	}
+	
+
+	public boolean checkForMines(int x, int y){
+		return mineArray[x][y] == 1;		
+	}
+	
+	public int checkAdjacent(int x, int y){
+		int adjacentMines = 0;
+		for (int i = -1; (i < x + 1) && (i < TOTAL_COLUMNS); i++){
+			for (int j = -1; (j < y + 1) && (j < TOTAL_ROWS); j++){
+				if((x + i < mineArray.length) && (y + j < mineArray[0].length) && (x + i >= 0) && (y + j >= 0)){
+					if(checkForMines(x + i, y + j)){
+						adjacentMines++;
+						}
+					else{
+						colorArray[x + i][y + j] = Color.GRAY;
+						this.repaint();						
+					}
+					}
+				}
+			}
+			return adjacentMines;
+	}
+}	
+	
+
