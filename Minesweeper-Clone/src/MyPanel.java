@@ -36,6 +36,14 @@ public class MyPanel extends JPanel{
 				colorArray[x][y] = Color.WHITE;
 			}
 		}
+		while (numMines < 9){
+			int newMine = randomMine.nextInt(2);
+			int X = randomMine.nextInt(TOTAL_COLUMNS);
+			int Y = randomMine.nextInt(TOTAL_ROWS);
+			if (newMine == 1 && mineArray[X][Y] != 1){
+				numMines ++;
+				mineArray[X][Y] = newMine;				}				
+		}
 	}
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
@@ -73,15 +81,7 @@ public class MyPanel extends JPanel{
 		
 		//Randomly populate cells with mines
 		
-		for (int x = 0; x< TOTAL_COLUMNS; x ++){
-			for (int y = 0; y < TOTAL_ROWS; y ++){
-				int newMine = randomMine.nextInt(2);
-				if (newMine == 1 && numMines < 9){
-					numMines ++;
-				}
-				mineArray[x][y] = newMine;
-			}
-		}
+		
 	}
 	public int getGridX(int x, int y){
 		Insets myInsets = getInsets();
@@ -132,7 +132,7 @@ public class MyPanel extends JPanel{
 		for (int i = 0; i < mineArray.length; i++){
 			for (int j = 0; j < mineArray[i].length; j++){
 				if (mineArray[i][j] == 1){
-					colorArray[i][j] = Color.RED;
+					colorArray[i][j] = Color.BLACK;
 				}
 			}
 		}
