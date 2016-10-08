@@ -114,29 +114,24 @@ public class MyMouseAdapter extends MouseAdapter{
 						//Here is where the game mechanics go
 						Color newColor = null;
 						
-						if (!checkForMines(myPanel)){ // checks if mine is clicked
-							
-						
-						for(int counterY= 0; counterY < 3; counterY++){
-							myPanel.mouseDownGridY = myPanel.mouseDownGridY + counterY - 1;
-							for(int counterX = 0; counterX < 3; counterX++){								
-								myPanel.mouseDownGridX = myPanel.mouseDownGridX + counterX - 1;
-								if (myPanel.mouseDownGridX >= 1 && myPanel.mouseDownGridX <= 10 && myPanel.mouseDownGridY >= 1 && myPanel.mouseDownGridY <= 10 && !checkForMines(myPanel)){
-									newColor = Color.GRAY;	
-									
-									
-									
-									
-									
-									myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] = newColor;
-									myPanel.repaint();
-								}
-								else{
+						if (!checkForMines(myPanel)){ // checks if mine is clicked														
+							for(int counterY= 0; counterY < 3; counterY++){  // checks for mines in 3x3 grid around clicked cell
+								myPanel.mouseDownGridY = myPanel.mouseDownGridY + counterY - 1;
+								for(int counterX = 0; counterX < 3; counterX++){								
+									myPanel.mouseDownGridX = myPanel.mouseDownGridX + counterX - 1;
+									if (myPanel.mouseDownGridX >= 0 && myPanel.mouseDownGridX <= 10 && myPanel.mouseDownGridY >= 0 && myPanel.mouseDownGridY <= 10 && !checkForMines(myPanel)){
+										newColor = Color.GRAY;																																														
+										myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] = newColor;
+										myPanel.repaint();
+									}
+									else{  // Takes into account the number of mines in adjacent cells
 									mineCounter++;
-								}
+									}
 								}							
 							}
 						}
+						
+						
 						//A mine is clicked
 						//cell is colored Black
 						//Game over message is shown, and app is terminated
@@ -147,7 +142,8 @@ public class MyMouseAdapter extends MouseAdapter{
 //							triggerMine();
 //							
 //							myFrame.dispose();
-						}						
+						}
+						mineCounter = 0;
 					}
 				}
 			}
