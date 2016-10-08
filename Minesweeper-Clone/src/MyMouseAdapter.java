@@ -8,8 +8,25 @@ import java.util.Random;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import java.awt.Font;
+import java.awt.Graphics;
+
+
+
 public class MyMouseAdapter extends MouseAdapter{
+	
+	
+	
 	private Random generator = new Random();
+	private int mineCounter = 0;
+	
+
+// Painting Method for Number of Mines in Adjacent Cells: Unfinished	
+//	  public void paint(Graphics g) {
+//		 
+//		    g.drawString(mineCounter + "", 150, 150);
+//		  }
+
 	
 	public boolean checkForMines(MyPanel myPanel){
 		if (myPanel.mineArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] == 1){
@@ -17,7 +34,9 @@ public class MyMouseAdapter extends MouseAdapter{
 		} else {
 		return false;
 		}
-	}
+	}	
+	
+	
 	public void triggerMine(){
 		JOptionPane.showMessageDialog(null, "GAME OVER!");
 		return; //dummy return
@@ -94,25 +113,48 @@ public class MyMouseAdapter extends MouseAdapter{
 						//Released the mouse button on the same cell where it was pressed
 						//Here is where the game mechanics go
 						Color newColor = null;
+						
 						if (!checkForMines(myPanel)){ // checks if mine is clicked
-							newColor = Color.GRAY;
+							
+						
+						for(int counterY= 0; counterY < 3; counterY++){
+							myPanel.mouseDownGridY = myPanel.mouseDownGridY + counterY - 1;
+							for(int counterX = 0; counterX < 3; counterX++){								
+								myPanel.mouseDownGridX = myPanel.mouseDownGridX + counterX - 1;
+								if (myPanel.mouseDownGridX >= 1 && myPanel.mouseDownGridX <= 10 && myPanel.mouseDownGridY >= 1 && myPanel.mouseDownGridY <= 10 && !checkForMines(myPanel)){
+									newColor = Color.GRAY;	
+									
+									
+									
+									
+									
+									myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] = newColor;
+									myPanel.repaint();
+								}
+								else{
+									mineCounter++;
+								}
+								}							
+							}
 						}
 						//A mine is clicked
-						//cell is colored Red
+						//cell is colored Black
 						//Game over message is shown, and app is terminated
 						else {
-							newColor = Color.RED;
+							newColor = Color.BLACK;
 							myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] = newColor;
 							myPanel.repaint();
-							triggerMine();
-							
-							myFrame.dispose();
-						}
-						myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] = newColor;
-						myPanel.repaint();
+//							triggerMine();
+//							
+//							myFrame.dispose();
+						}						
 					}
 				}
 			}
+			
+			
+			
+			
 			myPanel.repaint();
 			break;
 		case 3:		//Right mouse button
