@@ -155,9 +155,22 @@ public class MyPanel extends JPanel{
 						adjacentMines++;
 						}
 					else{
+						if(!(colorArray[x + i][y + j] == Color.RED)){
 						colorArray[x + i][y + j] = Color.GRAY;
 						this.repaint();						
 					}
+					}
+					if((x - i < mineArray.length) && (y - j < mineArray[0].length) && (x - i >= 0) && (y - j >= 0)){
+						if(checkForMines(x - i, y - j)){
+							adjacentMines++;
+							}
+						else{
+							if(!(colorArray[x - i][y - j] == Color.RED)){
+								colorArray[x - i][y - j] = Color.GRAY;
+								this.repaint();						
+								}
+							}
+						}
 					}
 				}
 			}
