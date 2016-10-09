@@ -148,17 +148,19 @@ public class MyPanel extends JPanel{
 	
 	public int checkAdjacent(int x, int y){
 		int adjacentMines = 0;
-		for (int i = -1; (i < x + 1) && (i < TOTAL_COLUMNS); i++){
-			for (int j = -1; (j < y + 1) && (j < TOTAL_ROWS); j++){
+		for (int i = -1; (i <= x) && (i < TOTAL_COLUMNS); i++){
+			for (int j = -1; (j <= y) && (j < TOTAL_ROWS); j++){
 				if((x + i < mineArray.length) && (y + j < mineArray[0].length) && (x + i >= 0) && (y + j >= 0)){
 					if(checkForMines(x + i, y + j)){
 						adjacentMines++;
 						}
 					else{
+						if(!(colorArray[x + i][y + j] == Color.RED)){
 						colorArray[x + i][y + j] = Color.GRAY;
 						this.repaint();						
 					}
 					}
+				}
 				}
 			}
 			return adjacentMines;
