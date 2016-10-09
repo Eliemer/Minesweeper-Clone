@@ -16,7 +16,7 @@ public class MyMouseAdapter extends MouseAdapter{
 	
 	public void mousePressed(MouseEvent e){
 		switch (e.getButton()){
-		case 1:
+		case 1:		//Left mouse button being pressed
 			Component c = e.getComponent();
 			while (!(c instanceof JFrame)){
 				c = c.getParent();
@@ -39,7 +39,7 @@ public class MyMouseAdapter extends MouseAdapter{
 			myPanel.mouseDownGridY = myPanel.getGridY(x, y);
 			myPanel.repaint();
 			break;
-		case 3:		//Right mouse button
+		case 3:		//Right mouse button being pressed
 			Component d = e.getComponent();
 			while (!(d instanceof JFrame)){
 				d = d.getParent();
@@ -71,7 +71,7 @@ public class MyMouseAdapter extends MouseAdapter{
 	public void mouseReleased(MouseEvent e) {
 		
 		switch (e.getButton()) {
-		case 1:		//Left mouse button
+		case 1:		//Left mouse button being released
 			Component c = e.getComponent();
 			while (!(c instanceof JFrame)) {
 				c = c.getParent();
@@ -113,9 +113,10 @@ public class MyMouseAdapter extends MouseAdapter{
 						}
 						
 						
+						
 						//A mine is clicked
 						//cell is colored Red
-						//Game over message is shown, and app is terminated
+						//Game over message is shown, and application is terminated
 						else {
 							newColor = Color.BLACK;
 							myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] = newColor;
@@ -130,7 +131,7 @@ public class MyMouseAdapter extends MouseAdapter{
 			}
 			myPanel.repaint();
 			break;
-		case 3:		//Right mouse button
+		case 3:		//Right mouse button being released
 			Component d = e.getComponent();
 			while (!(d instanceof JFrame)) {
 				d = d.getParent();
@@ -151,17 +152,16 @@ public class MyMouseAdapter extends MouseAdapter{
 			int gridX2 = myPanel2.getGridX(x3, y3);
 			int gridY2 = myPanel2.getGridY(x3, y3);
 			if ((myPanel2.mouseDownGridX == gridX2) && (myPanel2.mouseDownGridY == gridY2)){
-				if (gridX2 != -1 && gridY2 != -1){
-					if ((myPanel2.mouseDownGridX == gridX2) || (myPanel2.mouseDownGridY == gridY2)){
-						 if (myPanel2.colorArray[myPanel2.mouseDownGridX][myPanel2.mouseDownGridY] == Color.WHITE){
+				if (gridX2 != -1 && gridY2 != -1){				
+						 if (myPanel2.colorArray[myPanel2.mouseDownGridX][myPanel2.mouseDownGridY] == Color.WHITE){  //Changes color of a cell to Red when right-clicked
 							myPanel2.colorArray[myPanel2.mouseDownGridX][myPanel2.mouseDownGridY] = Color.RED;
 							myPanel2.repaint();
+							
 						 }
-						 if(myPanel2.colorArray[myPanel2.mouseDownGridX][myPanel2.mouseDownGridY] == Color.RED){
+						 else if(myPanel2.colorArray[myPanel2.mouseDownGridX][myPanel2.mouseDownGridY] == Color.RED){  //Changes color of a red cell back to white if right-clicked again
 							 myPanel2.colorArray[myPanel2.mouseDownGridX][myPanel2.mouseDownGridY] = Color.WHITE;
 							 myPanel2.repaint();
-						 }
-					}
+					}					
 				}
 			}
 			
