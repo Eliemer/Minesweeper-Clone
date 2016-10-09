@@ -40,7 +40,27 @@ public class MyMouseAdapter extends MouseAdapter{
 			myPanel.repaint();
 			break;
 		case 3:		//Right mouse button
-			//Do nothing
+			Component d = e.getComponent();
+			while (!(d instanceof JFrame)){
+				d = d.getParent();
+				if (d == null){
+					
+					return;
+				}
+			}
+			JFrame myFrame2 = (JFrame) d;
+			MyPanel myPanel2 = (MyPanel) myFrame2.getContentPane().getComponent(0);
+			Insets myInsets2 = myFrame2.getInsets();
+			int x2 = myInsets2.left;
+			int y2 = myInsets2.top;
+			e.translatePoint(-x2, -y2);
+			int x3 = e.getX();
+			int y3 = e.getY();
+			myPanel2.x = x3;
+			myPanel2.y = y3;
+			myPanel2.mouseDownGridX = myPanel2.getGridX(x3, y3);
+			myPanel2.mouseDownGridY = myPanel2.getGridY(x3, y3);
+			myPanel2.repaint();
 			break;
 		default:    //Some other button (2 = Middle mouse button, etc.)
 			//Do nothing
@@ -111,7 +131,41 @@ public class MyMouseAdapter extends MouseAdapter{
 			myPanel.repaint();
 			break;
 		case 3:		//Right mouse button
-			//Do nothing
+			Component d = e.getComponent();
+			while (!(d instanceof JFrame)) {
+				d = d.getParent();
+				if (d == null) {
+					return;
+				}
+			}
+			JFrame myFrame2 = (JFrame)d;
+			MyPanel myPanel2 = (MyPanel) myFrame2.getContentPane().getComponent(0);  //Can also loop among components to find MyPanel
+			Insets myInsets2 = myFrame2.getInsets();
+			int x2 = myInsets2.left;
+			int y2 = myInsets2.top;
+			e.translatePoint(-x2, -y2);
+			int x3 = e.getX();
+			int y3 = e.getY();
+			myPanel2.x = x3;
+			myPanel2.y = y3;
+			int gridX2 = myPanel2.getGridX(x3, y3);
+			int gridY2 = myPanel2.getGridY(x3, y3);
+			if ((myPanel2.mouseDownGridX == gridX2) && (myPanel2.mouseDownGridY == gridY2)){
+				if (gridX2 != -1 && gridY2 != -1){
+					if ((myPanel2.mouseDownGridX == gridX2) || (myPanel2.mouseDownGridY == gridY2)){
+						 if (myPanel2.colorArray[myPanel2.mouseDownGridX][myPanel2.mouseDownGridY] == Color.WHITE){
+							myPanel2.colorArray[myPanel2.mouseDownGridX][myPanel2.mouseDownGridY] = Color.RED;
+							myPanel2.repaint();
+						 }
+						 if(myPanel2.colorArray[myPanel2.mouseDownGridX][myPanel2.mouseDownGridY] == Color.RED){
+							 myPanel2.colorArray[myPanel2.mouseDownGridX][myPanel2.mouseDownGridY] = Color.WHITE;
+							 myPanel2.repaint();
+						 }
+					}
+				}
+			}
+			
+			
 			break;
 		default:    //Some other button (2 = Middle mouse button, etc.)
 			//Do nothing
