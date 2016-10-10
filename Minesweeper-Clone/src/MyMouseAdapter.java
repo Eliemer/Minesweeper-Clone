@@ -108,7 +108,7 @@ public class MyMouseAdapter extends MouseAdapter{
 						Color newColor = null;
 						
 						if (!myPanel.checkForMines(myPanel.mouseDownGridX,myPanel.mouseDownGridY)){ // checks if mine is clicked																					
-							myPanel.checkMineArray(myPanel.mouseDownGridX, myPanel.mouseDownGridY);							
+							myPanel.checkAdjacent(myPanel.mouseDownGridX, myPanel.mouseDownGridY);							
 							newColor = Color.GRAY;
 						}
 						
