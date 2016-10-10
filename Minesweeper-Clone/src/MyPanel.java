@@ -79,10 +79,6 @@ public class MyPanel extends JPanel{
 					g.fillRect(x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)) + 1, y1 + GRID_Y + (y * (INNER_CELL_SIZE + 1)) + 1, INNER_CELL_SIZE, INNER_CELL_SIZE);
 			}
 		}
-		
-		//Randomly populate cells with mines
-		
-		
 	}
 	public int getGridX(int x, int y){
 		Insets myInsets = getInsets();
@@ -148,23 +144,23 @@ public class MyPanel extends JPanel{
 	}
 	
 	public void checkAdjacent(int x, int y){
-				if((x >= mineArray.length) || (y >= mineArray[0].length) || (x < 0) || (y < 0)){ return; }
+		if((x >= mineArray.length) || (y >= mineArray[0].length) || (x < 0) || (y < 0)){ return; }
+			
+		if (checkForMines(x,y)){
+			return;
+		}else {
+		
+			if (colorArray[x][y] == Color.GRAY){
+				return;
+			}
 				
-				if (checkForMines(x,y)){
-					return;
-				}else {
+			colorArray[x][y] = Color.GRAY;
+			checkAdjacent(x + 1, y);
+			checkAdjacent(x - 1, y);
+			checkAdjacent(x, y + 1);
+			checkAdjacent(x, y - 1);
 				
-					if (colorArray[x][y] == Color.GRAY){
-					return;
-					}
-					
-					colorArray[x][y] = Color.GRAY;
-					checkAdjacent(x + 1, y);
-					checkAdjacent(x - 1, y);
-					checkAdjacent(x, y + 1);
-					checkAdjacent(x, y - 1);
-				
-				}
+		}
 	}
 }	
 	
