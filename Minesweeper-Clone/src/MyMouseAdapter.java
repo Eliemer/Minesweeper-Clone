@@ -11,18 +11,17 @@ import javax.swing.JFrame;
 public class MyMouseAdapter extends MouseAdapter{
 	//private Random generator = new Random();
 	
-	public boolean checkForMines(MyPanel myPanel){
-		return myPanel.mineArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] == 1;		
-	}
+
 	
 	
 	public void mousePressed(MouseEvent e){
 		switch (e.getButton()){
-		case 1:
+		case 1:		//Left mouse button being pressed
 			Component c = e.getComponent();
 			while (!(c instanceof JFrame)){
 				c = c.getParent();
 				if (c == null){
+					
 					return;
 				}
 			}
@@ -40,8 +39,28 @@ public class MyMouseAdapter extends MouseAdapter{
 			myPanel.mouseDownGridY = myPanel.getGridY(x, y);
 			myPanel.repaint();
 			break;
-		case 3:		//Right mouse button
-			//Do nothing
+		case 3:		//Right mouse button being pressed
+			Component d = e.getComponent();
+			while (!(d instanceof JFrame)){
+				d = d.getParent();
+				if (d == null){
+					
+					return;
+				}
+			}
+			JFrame myFrame2 = (JFrame) d;
+			MyPanel myPanel2 = (MyPanel) myFrame2.getContentPane().getComponent(0);
+			Insets myInsets2 = myFrame2.getInsets();
+			int x2 = myInsets2.left;
+			int y2 = myInsets2.top;
+			e.translatePoint(-x2, -y2);
+			int x3 = e.getX();
+			int y3 = e.getY();
+			myPanel2.x = x3;
+			myPanel2.y = y3;
+			myPanel2.mouseDownGridX = myPanel2.getGridX(x3, y3);
+			myPanel2.mouseDownGridY = myPanel2.getGridY(x3, y3);
+			myPanel2.repaint();
 			break;
 		default:    //Some other button (2 = Middle mouse button, etc.)
 			//Do nothing
@@ -52,7 +71,7 @@ public class MyMouseAdapter extends MouseAdapter{
 	public void mouseReleased(MouseEvent e) {
 		
 		switch (e.getButton()) {
-		case 1:		//Left mouse button
+		case 1:		//Left mouse button being released
 			Component c = e.getComponent();
 			while (!(c instanceof JFrame)) {
 				c = c.getParent();
@@ -87,12 +106,17 @@ public class MyMouseAdapter extends MouseAdapter{
 						//Released the mouse button on the same cell where it was pressed
 						//Here is where the game mechanics go
 						Color newColor = null;
-						if (!checkForMines(myPanel)){ // checks if mine is clicked
+						
+						if (!myPanel.checkForMines(myPanel.mouseDownGridX,myPanel.mouseDownGridY)){ // checks if mine is clicked																					
+							myPanel.checkMineArray(myPanel.mouseDownGridX, myPanel.mouseDownGridY);							
 							newColor = Color.GRAY;
 						}
+						
+						
+						
 						//A mine is clicked
 						//cell is colored Red
-						//Game over message is shown, and app is terminated
+						//Game over message is shown, and application is terminated
 						else {
 							newColor = Color.BLACK;
 							myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] = newColor;
@@ -107,8 +131,41 @@ public class MyMouseAdapter extends MouseAdapter{
 			}
 			myPanel.repaint();
 			break;
-		case 3:		//Right mouse button
-			//Do nothing
+		case 3:		//Right mouse button being released
+			Component d = e.getComponent();
+			while (!(d instanceof JFrame)) {
+				d = d.getParent();
+				if (d == null) {
+					return;
+				}
+			}
+			JFrame myFrame2 = (JFrame)d;
+			MyPanel myPanel2 = (MyPanel) myFrame2.getContentPane().getComponent(0);  //Can also loop among components to find MyPanel
+			Insets myInsets2 = myFrame2.getInsets();
+			int x2 = myInsets2.left;
+			int y2 = myInsets2.top;
+			e.translatePoint(-x2, -y2);
+			int x3 = e.getX();
+			int y3 = e.getY();
+			myPanel2.x = x3;
+			myPanel2.y = y3;
+			int gridX2 = myPanel2.getGridX(x3, y3);
+			int gridY2 = myPanel2.getGridY(x3, y3);
+			if ((myPanel2.mouseDownGridX == gridX2) && (myPanel2.mouseDownGridY == gridY2)){
+				if (gridX2 != -1 && gridY2 != -1){				
+						 if (myPanel2.colorArray[myPanel2.mouseDownGridX][myPanel2.mouseDownGridY] == Color.WHITE){  //Changes color of a cell to Red when right-clicked
+							myPanel2.colorArray[myPanel2.mouseDownGridX][myPanel2.mouseDownGridY] = Color.RED;
+							myPanel2.repaint();
+							
+						 }
+						 else if(myPanel2.colorArray[myPanel2.mouseDownGridX][myPanel2.mouseDownGridY] == Color.RED){  //Changes color of a red cell back to white if right-clicked again
+							 myPanel2.colorArray[myPanel2.mouseDownGridX][myPanel2.mouseDownGridY] = Color.WHITE;
+							 myPanel2.repaint();
+					}					
+				}
+			}
+			
+			
 			break;
 		default:    //Some other button (2 = Middle mouse button, etc.)
 			//Do nothing
