@@ -37,7 +37,11 @@ public class MyPanel extends JPanel{
 				colorArray[x][y] = Color.WHITE;
 			}
 		}
+<<<<<<< HEAD
 		while (numMines < 27 + totalMines.nextInt(4)){
+=======
+		while (numMines < 9){
+>>>>>>> master
 			int newMine = randomMine.nextInt(2);
 			int X = randomMine.nextInt(TOTAL_COLUMNS);
 			int Y = randomMine.nextInt(TOTAL_ROWS);
@@ -147,6 +151,7 @@ public class MyPanel extends JPanel{
 		return mineArray[x][y] == 1;		
 	}
 	
+<<<<<<< HEAD
 	public void checkAdjacent(int x, int y){
 				if((x >= mineArray.length) || (y >= mineArray[0].length) || (x < 0) || (y < 0)){ return; }
 				
@@ -165,6 +170,37 @@ public class MyPanel extends JPanel{
 					checkAdjacent(x, y - 1);
 				
 				}
+=======
+	public int checkAdjacent(int x, int y){
+		int adjacentMines = 0;
+		for (int i = -1; (i < x + 1) && (i < TOTAL_COLUMNS); i++){
+			for (int j = -1; (j < y + 1) && (j < TOTAL_ROWS); j++){
+				if((x + i < mineArray.length) && (y + j < mineArray[0].length) && (x + i >= 0) && (y + j >= 0)){
+					if(checkForMines(x + i, y + j)){
+						adjacentMines++;
+						}
+					else{
+						if(!(colorArray[x + i][y + j] == Color.RED)){
+						colorArray[x + i][y + j] = Color.GRAY;
+						this.repaint();						
+					}
+					}
+					if((x - i < mineArray.length) && (y - j < mineArray[0].length) && (x - i >= 0) && (y - j >= 0)){
+						if(checkForMines(x - i, y - j)){
+							adjacentMines++;
+							}
+						else{
+							if(!(colorArray[x - i][y - j] == Color.RED)){
+								colorArray[x - i][y - j] = Color.GRAY;
+								this.repaint();						
+								}
+							}
+						}
+					}
+				}
+			}
+			return adjacentMines;
+>>>>>>> master
 	}
 }	
 	
