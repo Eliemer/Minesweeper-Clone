@@ -13,6 +13,7 @@ public class MyPanel extends JPanel{
 	private static final int INNER_CELL_SIZE = 29;
 	private static final int TOTAL_COLUMNS = 9;
 	private static final int TOTAL_ROWS = 9;
+	public Random totalMines = new Random();
 	public Random randomMine = new Random();
 	public int numMines = 0;
 	public int x = -1;
@@ -36,7 +37,11 @@ public class MyPanel extends JPanel{
 				colorArray[x][y] = Color.WHITE;
 			}
 		}
+<<<<<<< HEAD
+		while (numMines < 27 + totalMines.nextInt(4)){
+=======
 		while (numMines < 9){
+>>>>>>> master
 			int newMine = randomMine.nextInt(2);
 			int X = randomMine.nextInt(TOTAL_COLUMNS);
 			int Y = randomMine.nextInt(TOTAL_ROWS);
@@ -146,6 +151,26 @@ public class MyPanel extends JPanel{
 		return mineArray[x][y] == 1;		
 	}
 	
+<<<<<<< HEAD
+	public void checkAdjacent(int x, int y){
+				if((x >= mineArray.length) || (y >= mineArray[0].length) || (x < 0) || (y < 0)){ return; }
+				
+				if (checkForMines(x,y)){
+					return;
+				}else {
+				
+					if (colorArray[x][y] == Color.GRAY){
+					return;
+					}
+					
+					colorArray[x][y] = Color.GRAY;
+					checkAdjacent(x + 1, y);
+					checkAdjacent(x - 1, y);
+					checkAdjacent(x, y + 1);
+					checkAdjacent(x, y - 1);
+				
+				}
+=======
 	public int checkAdjacent(int x, int y){
 		int adjacentMines = 0;
 		for (int i = -1; (i < x + 1) && (i < TOTAL_COLUMNS); i++){
@@ -175,6 +200,7 @@ public class MyPanel extends JPanel{
 				}
 			}
 			return adjacentMines;
+>>>>>>> master
 	}
 }	
 	
