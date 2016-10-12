@@ -13,15 +13,17 @@ public class MyPanel extends JPanel{
 	private static final int INNER_CELL_SIZE = 29;
 	private static final int TOTAL_COLUMNS = 9;
 	private static final int TOTAL_ROWS = 9;
-	public Random totalMines = new Random();
-	public Random randomMine = new Random();
-	public int numMines = 0;
+	private Random totalMines = new Random();
+	private final int TOTAL_MINES = 12 + totalMines.nextInt(4);
+	private Random randomMine = new Random();
+	private int numMines = 0;
 	public int x = -1;
 	public int y = -1;
 	public int mouseDownGridX = 0;
 	public int mouseDownGridY = 0;
 	public Color[][] colorArray = new Color[TOTAL_COLUMNS][TOTAL_ROWS];
-	public int mineArray[][] = new int[TOTAL_COLUMNS][TOTAL_ROWS];
+	public int[][] mineArray = new int[TOTAL_COLUMNS][TOTAL_ROWS];
+	public int[][] adjacentMineArray = new int[TOTAL_COLUMNS][TOTAL_ROWS];
 	public MyPanel(){
 		if (INNER_CELL_SIZE + (new Random()).nextInt(1) < 1){
 			throw new RuntimeException("INNER_CELL_SIZE must be positive!");
@@ -37,15 +39,29 @@ public class MyPanel extends JPanel{
 				colorArray[x][y] = Color.WHITE;
 			}
 		}
-		while (numMines < 27 + totalMines.nextInt(4)){
+		//Populate grid with random mines
+		while (numMines < TOTAL_MINES){
 			int newMine = randomMine.nextInt(2);
 			int X = randomMine.nextInt(TOTAL_COLUMNS);
 			int Y = randomMine.nextInt(TOTAL_ROWS);
 			if (newMine == 1 && mineArray[X][Y] != 1){
 				numMines ++;
-				mineArray[X][Y] = newMine;				}				
+				mineArray[X][Y] = newMine;		
+			}		
+		}
+		//Populate adjacentMineArray
+		for (int i = 0; i < TOTAL_COLUMNS; i ++){
+			for (int j = 0; j < TOTAL_ROWS; j ++){
+				if (!checkForMines(i,j)){
+					adjacentMineArray[i][j] = adjacentMines(i,j);
+				}
+				else {
+					adjacentMineArray[i][j] = -1;
+				}
+			}
 		}
 	}
+	
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		
@@ -77,9 +93,19 @@ public class MyPanel extends JPanel{
 					Color c = colorArray[x][y];
 					g.setColor(c);
 					g.fillRect(x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)) + 1, y1 + GRID_Y + (y * (INNER_CELL_SIZE + 1)) + 1, INNER_CELL_SIZE, INNER_CELL_SIZE);
+					if(colorArray[x][y] == Color.GRAY){
+						g.setColor(Color.GREEN);
+						g.drawString(getMineCount(x,y) + "",x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)) + 12, y1 + GRID_Y + (y * (INNER_CELL_SIZE + 1)) + 20);
+					}
 			}
 		}
+
+		//Draw a mine counter on the bottom of the screen
+		g.setColor(Color.BLACK);
+		g.drawString(TOTAL_MINES + " total mines", 150, height - 25);
+
 	}
+	
 	public int getGridX(int x, int y){
 		Insets myInsets = getInsets();
 		int x1 = myInsets.left;
@@ -102,6 +128,7 @@ public class MyPanel extends JPanel{
 		}
 		return x;
 	}
+	
 	public int getGridY(int x, int y){
 		Insets myInsets = getInsets();
 		int x1 = myInsets.left;
@@ -124,8 +151,16 @@ public class MyPanel extends JPanel{
 		}
 		return y;
 	}
+	
+	public boolean checkForMines(int x, int y){
+		return mineArray[x][y] == 1;		
+	}
+	
+	public int getMineCount(int x,int y){
+		return adjacentMineArray[x][y];
+	}
+	
 	public void triggerMine(){
-		
 		for (int i = 0; i < mineArray.length; i++){
 			for (int j = 0; j < mineArray[i].length; j++){
 				if (mineArray[i][j] == 1){
@@ -138,27 +173,47 @@ public class MyPanel extends JPanel{
 		return; //dummy return
 	}
 	
-
-	public boolean checkForMines(int x, int y){
-		return mineArray[x][y] == 1;		
+	public int adjacentMines(int x, int y){
+		int adjacentMines = 0;
+		for (int i = 0; i < 3; i ++){
+			for(int j = 0; j < 3; j ++){
+				if (((x-1) + i < mineArray.length && (x-1)+i >= 0) && (y-1)+j < mineArray[(x-1)+i].length && (y-1)+j >= 0){
+					if (checkForMines((x-1)+i,(y-1)+j)){
+						adjacentMines ++;
+					}
+				}
+			}
+		}
+		return adjacentMines;
 	}
-	
+
 	public void checkAdjacent(int x, int y){
 		if((x >= mineArray.length) || (y >= mineArray[0].length) || (x < 0) || (y < 0)){ return; }
-			
+
+				
 		if (checkForMines(x,y)){
 			return;
 		}else {
-		
-			if (colorArray[x][y] == Color.GRAY){
+			if (adjacentMines(x,y) != 0){
+				colorArray[x][y] = Color.GRAY;
 				return;
 			}
+			if (colorArray[x][y] == Color.GRAY || colorArray[x][y] == Color.RED){
 				
+			return;
+			}
+					
+			//Minesweeper Recursion
 			colorArray[x][y] = Color.GRAY;
 			checkAdjacent(x + 1, y);
-			checkAdjacent(x - 1, y);
 			checkAdjacent(x, y + 1);
+			checkAdjacent(x - 1, y);
 			checkAdjacent(x, y - 1);
+			
+			checkAdjacent(x + 1, y - 1);
+			checkAdjacent(x - 1, y - 1);
+			checkAdjacent(x + 1, y + 1);
+			checkAdjacent(x - 1, y + 1);
 				
 		}
 	}
