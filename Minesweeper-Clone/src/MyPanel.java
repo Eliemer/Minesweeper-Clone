@@ -99,9 +99,11 @@ public class MyPanel extends JPanel{
 					}
 			}
 		}
+
 		//Draw a mine counter on the bottom of the screen
 		g.setColor(Color.BLACK);
 		g.drawString(TOTAL_MINES + " total mines", 150, height - 25);
+
 	}
 	
 	public int getGridX(int x, int y){
@@ -187,6 +189,7 @@ public class MyPanel extends JPanel{
 
 	public void checkAdjacent(int x, int y){
 		if((x >= mineArray.length) || (y >= mineArray[0].length) || (x < 0) || (y < 0)){ return; }
+
 				
 		if (checkForMines(x,y)){
 			return;
