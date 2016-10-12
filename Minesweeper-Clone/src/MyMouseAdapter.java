@@ -10,10 +10,7 @@ import javax.swing.JFrame;
 
 public class MyMouseAdapter extends MouseAdapter{
 	//private Random generator = new Random();
-	
 
-	
-	
 	public void mousePressed(MouseEvent e){
 		switch (e.getButton()){
 		case 1:		//Left mouse button being pressed
@@ -95,31 +92,20 @@ public class MyMouseAdapter extends MouseAdapter{
 				//Had pressed outside
 				//Do nothing
 			} else {
-				if ((gridX == -1) || (gridY == -1)) {
-					//Is releasing outside
-					//Do nothing
-				} else {
-					if ((myPanel.mouseDownGridX != gridX) || (myPanel.mouseDownGridY != gridY)) {
-						//Released the mouse button on a different cell where it was pressed
-						//Do nothing
-					} else {
+				if ((gridX != -1) && (gridY != -1)) {
+					if ((myPanel.mouseDownGridX == gridX) && (myPanel.mouseDownGridY == gridY)) {
 						//Released the mouse button on the same cell where it was pressed
 						//Here is where the game mechanics go
 						Color newColor = null;
-						
 						if (!myPanel.checkForMines(myPanel.mouseDownGridX,myPanel.mouseDownGridY)){ // checks if mine is clicked																					
-							myPanel.checkAdjacent(myPanel.mouseDownGridX, myPanel.mouseDownGridY);							
+							myPanel.checkAdjacent(myPanel.mouseDownGridX, myPanel.mouseDownGridY);
 							newColor = Color.GRAY;
 						}
-						
-						
-						
+
 						//A mine is clicked
-						//cell is colored Red
+						//cell is colored Black
 						//Game over message is shown, and application is terminated
 						else {
-							newColor = Color.BLACK;
-							myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] = newColor;
 							myPanel.triggerMine();
 							myPanel.repaint();
 							myFrame.dispose();
@@ -153,7 +139,7 @@ public class MyMouseAdapter extends MouseAdapter{
 			int gridY2 = myPanel2.getGridY(x3, y3);
 			if ((myPanel2.mouseDownGridX == gridX2) && (myPanel2.mouseDownGridY == gridY2)){
 				if (gridX2 != -1 && gridY2 != -1){				
-						 if (myPanel2.colorArray[myPanel2.mouseDownGridX][myPanel2.mouseDownGridY] == Color.WHITE){  //Changes color of a cell to Red when right-clicked
+						 if (myPanel2.colorArray[myPanel2.mouseDownGridX][myPanel2.mouseDownGridY] == Color.WHITE){  //Changes color of a white cell to Red when right-clicked
 							myPanel2.colorArray[myPanel2.mouseDownGridX][myPanel2.mouseDownGridY] = Color.RED;
 							myPanel2.repaint();
 							
