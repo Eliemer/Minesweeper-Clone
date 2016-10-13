@@ -98,7 +98,7 @@ public class MyMouseAdapter extends MouseAdapter{
 							myPanel.checkAdjacent(myPanel.mouseDownGridX, myPanel.mouseDownGridY);
 							newColor = Color.GRAY;
 							//Checks when player has revealed all cells
-							//Winning message is shown and application is terminated
+							//Win message is shown and application is terminated
 								if (myPanel.checkForWin()){ 
 									myPanel.repaint();
 									myFrame.dispose();		
