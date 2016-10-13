@@ -87,13 +87,13 @@ public class MyPanel extends JPanel{
 			g.drawLine(x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)), y1 + GRID_Y, x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)), y1 + GRID_Y + ((INNER_CELL_SIZE + 1) * (TOTAL_ROWS)));
 		}
 
-		//Paint cell colors
+		//Paint cell colors and cell numbers when clicked
 		for (int x = 0; x < TOTAL_COLUMNS; x ++){
 			for (int y = 0; y < TOTAL_ROWS; y ++){
 					Color c = colorArray[x][y];
 					g.setColor(c);
 					g.fillRect(x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)) + 1, y1 + GRID_Y + (y * (INNER_CELL_SIZE + 1)) + 1, INNER_CELL_SIZE, INNER_CELL_SIZE);
-					if(colorArray[x][y] == Color.GRAY){
+					if(colorArray[x][y] == Color.GRAY && getMineCount(x, y) > 0){
 						g.setColor(Color.GREEN);
 						g.drawString(getMineCount(x,y) + "",x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)) + 12, y1 + GRID_Y + (y * (INNER_CELL_SIZE + 1)) + 20);
 					}
@@ -152,15 +152,15 @@ public class MyPanel extends JPanel{
 		return y;
 	}
 	
-	public boolean checkForMines(int x, int y){
+	public boolean checkForMines(int x, int y){ //Checks if a mine is present in a cell
 		return mineArray[x][y] == 1;		
 	}
 	
-	public int getMineCount(int x,int y){
+	public int getMineCount(int x,int y){ //Counts the total amount of Mines generated
 		return adjacentMineArray[x][y];
 	}
 	
-	public void triggerMine(){
+	public void triggerMine(){ //Ends the game when a player has clicked a mine
 		for (int i = 0; i < mineArray.length; i++){
 			for (int j = 0; j < mineArray[i].length; j++){
 				if (mineArray[i][j] == 1){
@@ -172,8 +172,25 @@ public class MyPanel extends JPanel{
 		JOptionPane.showMessageDialog(null, "GAME OVER!");
 		return; //dummy return
 	}
-	
-	public int adjacentMines(int x, int y){
+		
+	public boolean checkForWin(){ //Checks if player has won and ends the application if so
+		int revealedCells = 0;
+		for (int i = 0; i < TOTAL_ROWS; i++){
+			for (int j = 0; j < TOTAL_COLUMNS; j++){
+				if (colorArray[i][j] == Color.GRAY){
+					revealedCells++;
+				}
+			}
+		}
+		if (revealedCells >= TOTAL_ROWS * TOTAL_COLUMNS - TOTAL_MINES){
+			this.repaint();
+			JOptionPane.showMessageDialog(null, "YOU WON!");
+			return true;
+		}
+		return false;
+	}
+					
+	public int adjacentMines(int x, int y){ //Counts the number of Mines adjacent to a cell
 		int adjacentMines = 0;
 		for (int i = 0; i < 3; i ++){
 			for(int j = 0; j < 3; j ++){
@@ -187,7 +204,7 @@ public class MyPanel extends JPanel{
 		return adjacentMines;
 	}
 
-	public void checkAdjacent(int x, int y){
+	public void checkAdjacent(int x, int y){ //Checks adjacent cells and paints them if no mine is present
 		if((x >= mineArray.length) || (y >= mineArray[0].length) || (x < 0) || (y < 0)){ return; }
 
 				
@@ -217,6 +234,4 @@ public class MyPanel extends JPanel{
 				
 		}
 	}
-}	
-	
-
+} 
