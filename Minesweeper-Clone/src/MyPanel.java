@@ -220,7 +220,7 @@ public class MyPanel extends JPanel{
 			return;
 			}
 					
-			//Minesweeper Recursion
+			//Minesweeper Adjacent Cell Recursion
 			colorArray[x][y] = Color.GRAY;
 			checkAdjacent(x + 1, y);
 			checkAdjacent(x, y + 1);
